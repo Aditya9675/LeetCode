@@ -1,5 +1,5 @@
 # LeetCode
-Solution of LeetCode
+300+ Solution of LeetCode 
 
 #online
 https://aditya9675.github.io/LeetCode/ 
