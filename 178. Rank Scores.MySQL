@@ -52,7 +52,5 @@ Output:
 
 */
 
-
-select s.Score, (SELECT count(distinct(Score)) from Scores m where m.Score >= s.Score) as Rank
-from Scores s
-order by s.Score desc
+select Score, dense_rank() over(order by Score desc) as 'Rank'
+from Scores
