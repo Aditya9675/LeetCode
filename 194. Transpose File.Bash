@@ -18,26 +18,18 @@ age 21 30
 
 */
 
-#!/bin/bash
-
-declare -a names
-declare -a ages
-
-while read line
-do 
-	words=($line)
-	names+=(${words[0]})
-	ages+=(${words[1]})
-done < file.txt
-
-for name in ${names[@]}
-do 
-	printf "%s " $name
-done
-
-printf "\n"
-
-for age in ${ages[@]}
-do 
-	printf "%s " $age
-done
+awk '
+{
+    for (i = 1; i <= NF; i++) {
+        if(NR == 1) {
+            s[i] = $i;
+        } else {
+            s[i] = s[i] " " $i;
+        }
+    }
+}
+END {
+    for (i = 1; s[i] != ""; i++) {
+        print s[i];
+    }
+}' file.txt
