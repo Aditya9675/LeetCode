@@ -27,42 +27,36 @@ The number of nodes in the tree is in the range [0, 104].
 */
 
 public class Codec {
-    List<String> count;
-   
+    StringBuilder sb = new StringBuilder();
+    
     public String serialize(TreeNode root) {
-        count = new ArrayList<>();
-        iter(root, 1);
-        count.remove(0);
-        String ret = "";
-        for (String i: count){
-            ret = ret+i;
-            ret = ret+",";
+        preorderTraversal(root);
+        return sb.toString();
+    }
+    void preorderTraversal(TreeNode root){
+        if(root==null){
+            sb.append("n ");
+            return;
         }
-        ret.substring(0, ret.length()-1);
-        return ret;
+        sb.append(root.val+" ");
+        preorderTraversal(root.left);
+        preorderTraversal(root.right);
     }
-    
-    public void iter(TreeNode root, int index){
-        if (root == null) return;
-        while (index >= count.size())
-            count.add(new String("n"));
-        count.add(index, String.valueOf(root.val));
-        iter(root.left, index*2);
-        iter(root.right, index*2+1);
-    }
-
-    
+   
+    int index = 0;
     public TreeNode deserialize(String data) {
-        String[] raw = data.split(",");
-        return iter2(raw, 1);
+        String[] ss = data.split(" ");
+        return prebuild(ss);
     }
-    
-    public TreeNode iter2(String[] raw, int index){
-        if (raw[index-1] == "n")
-            return null;
-        TreeNode cur = new TreeNode(Integer.valueOf(raw[index-1]));
-        cur.left = iter2(raw, index*2);
-        cur.right = iter2(raw, index*2+1);
-        return cur;
+    TreeNode prebuild(String[] ss){
+        if(index>=ss.length)return null;
+        if(ss[index].equals("n"))return null;
+        TreeNode node = new TreeNode(Integer.parseInt(ss[index]));
+        index++;
+        node.left=prebuild(ss);
+        index++;
+        node.right=prebuild(ss);
+        return node;
     }
 }
+
