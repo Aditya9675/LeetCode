@@ -33,62 +33,40 @@ All the strings of words are unique.
 
 class Solution {
     public List<String> findWords(char[][] board, String[] words) {
+        TrieNode root = new TrieNode();
+        for (String s : words) root.add(s, 0);
+        Set<String> res = new HashSet<>();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                find(board, i, j, root.next[board[i][j] - 'a'], res);
+            }
+        }
+        return new ArrayList<>(res);
+    }
     
-        ArrayList<String> result = new ArrayList<String>();
- 
-	int m = board.length;
-	int n = board[0].length;
- 
-	for (String word : words) {
-		boolean flag = false;
-		for (int i = 0; i < m; i++) {
-			for (int j = 0; j < n; j++) {
-				char[][] newBoard = new char[m][n];
-				for (int x = 0; x < m; x++)
-					for (int y = 0; y < n; y++)
-						newBoard[x][y] = board[x][y];
- 
-				if (dfs(newBoard, word, i, j, 0)) {
-					flag = true;
-				}
-			}
-		}
-		if (flag) {
-			result.add(word);
-		}
-	}
- 
-	return result;
-}
- 
-public boolean dfs(char[][] board, String word, int i, int j, int k) {
-	int m = board.length;
-	int n = board[0].length;
- 
-	if (i < 0 || j < 0 || i >= m || j >= n || k > word.length() - 1) {
-		return false;
-	}
- 
-	if (board[i][j] == word.charAt(k)) {
-		char temp = board[i][j];
-		board[i][j] = '#';
- 
-		if (k == word.length() - 1) {
-			return true;
-		} else if (dfs(board, word, i - 1, j, k + 1)
-				|| dfs(board, word, i + 1, j, k + 1)
-				|| dfs(board, word, i, j - 1, k + 1)
-				|| dfs(board, word, i, j + 1, k + 1)) {
-			board[i][j] = temp;
-			return true;
-		}
- 
-	} else {
-		return false;
-	}
- 
-	return false;
+    private void find(char[][] board, int i, int j, TrieNode root, Set<String> res) {
+        if (root == null) return;
+        if (root.word != null) res.add(root.word);
+        char c = board[i][j];
+        board[i][j] = 'z' + 1;
+        if (i > 0) find(board, i - 1, j, root.next[board[i - 1][j] - 'a'], res);
+        if (j > 0) find(board, i, j - 1, root.next[board[i][j - 1] - 'a'], res);
+        if (i < board.length - 1) find(board, i + 1, j, root.next[board[i + 1][j] - 'a'], res);
+        if (j < board[0].length - 1) find(board, i, j + 1, root.next[board[i][j + 1] - 'a'], res);        
+        board[i][j] = c;
+    }
+    
+    class TrieNode {
+        TrieNode[] next = new TrieNode[27];
+        String word;
+        public void add(String s, int index) {
+            char c = s.charAt(index);
+            if (next[c - 'a'] == null) next[c - 'a'] = new TrieNode();
+            if (index + 1 < s.length()) next[c - 'a'].add(s, index + 1);
+            else next[c - 'a'].word = s;
+        }
     }
 }
+
 
 
