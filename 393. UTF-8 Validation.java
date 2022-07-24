@@ -45,7 +45,7 @@ Constraints:
 */
 
 class Solution {
-    public boolean validUtf8(int[] data) {
+    public boolean validUtf8(int[] arr) {
         int count = 0;
         for(int i=0;i<arr.length;i++){
             int val = arr[i];
