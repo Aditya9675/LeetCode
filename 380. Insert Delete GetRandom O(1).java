@@ -39,58 +39,54 @@ There will be at least one element in the data structure when getRandom is calle
 */
 
 class RandomizedSet {
-    HashMap<Integer, Integer> valueMap;
-    HashMap<Integer, Integer> idxMap;
- 
+    HashMap<Integer,Integer> hmap;
+    ArrayList<Integer> arr;
     
     public RandomizedSet() {
-        valueMap = new HashMap<>();
-        idxMap = new HashMap<>();
+        hmap=new HashMap<Integer,Integer>();
+        arr=new ArrayList<Integer>();
     }
- 
     
+   
     public boolean insert(int val) {
-        if(valueMap.containsKey(val)){
+         if(hmap.get(val)!=null)
             return false;
-        }
- 
-        valueMap.put(val, valueMap.size());
-        idxMap.put(idxMap.size(), val);
- 
+         
+         int s=arr.size();
+         arr.add(val);
+         hmap.put(val,s);
+         return true;
+    }
+    
+  
+    public boolean remove(int val) {
+        
+        Integer idx=hmap.get(val);
+
+        if(idx==null)
+            return false;
+        
+        
+        int size=arr.size();
+        Integer last = arr.get(size-1);
+        Collections.swap(arr,idx,size-1);
+        
+        hmap.put(last,idx);
+        
+        hmap.remove(val);
+        arr.remove(size-1);
+
+
         return true;
     }
- 
-    public boolean remove(int val) {
-        if(valueMap.containsKey(val)){
-            int idx = valueMap.get(val);
-            valueMap.remove(val);
-            idxMap.remove(idx);
- 
-            Integer tailElem = idxMap.get(idxMap.size());
-            if(tailElem!=null){
-                idxMap.put(idx,tailElem);
-                valueMap.put(tailElem, idx);
-            }
- 
-            return true;
-        }
- 
-        return false;
-    }
- 
-  
+    
+    
     public int getRandom() {
-        if(valueMap.size()==0){
-            return -1;
+        if(arr.size()>0){
+        Random rnd=new Random();
+        int rnd_idx=rnd.nextInt(arr.size());
+        return arr.get(rnd_idx);
         }
- 
-        if(valueMap.size()==1){
-            return idxMap.get(0);
-        }
- 
-        Random r = new Random();
-        int idx = r.nextInt(valueMap.size());
- 
-        return idxMap.get(idx);
+        return -1;
     }
 }
