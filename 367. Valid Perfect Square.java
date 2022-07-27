@@ -23,11 +23,17 @@ Constraints:
 */
 class Solution {
     public boolean isPerfectSquare(int num) {
-        for (int i = 1; i * i <= num; i++) {
-            if ((num % i == 0) && (num / i == i)) {
-                return true;
-            }
-        }
-        return false; 
+          long l = 1;
+    long r = num;
+
+    while (l < r) {
+      final long m = (l + r) / 2;
+      if (m >= num / m)
+        r = m;
+      else
+        l = m + 1;
+    }
+
+    return l * l == num; 
     }
 }
