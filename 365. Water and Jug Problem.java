@@ -34,16 +34,12 @@ Constraints:
 */
 
 class Solution {
-    public boolean canMeasureWater(int x, int y, int z) {
-         if(z>y && z>x)
-             return false;
-        if(z%gcd(x,y)==0)
-            return true;
-        return false;
-        
-    }
-    public int gcd(int x,int y){
-        if(y==0)return x;
-        return gcd(y,x%y);
+    public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
+    return targetCapacity == 0 || jug1Capacity + jug2Capacity >= targetCapacity &&
+                                      targetCapacity % gcd(jug1Capacity, jug2Capacity) == 0;
+  }
+
+  private int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
     }
 }
