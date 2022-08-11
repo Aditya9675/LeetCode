@@ -25,28 +25,27 @@ Constraints:
 
 class Solution {
     public boolean canPartition(int[] nums) {
-         if (nums == null || nums.length < 1) {
-            return true;
-        }
-        int sum = 0;
-        for (int i : nums) {
-            sum += i;
-        }
-        if (sum % 2 == 1) {
-            return false;
-        }
-        sum /= 2;
-        return isSumSubarray(nums, sum, nums.length - 1);
+         final int sum = Arrays.stream(nums).sum();
+    if (sum % 2 == 1)
+      return false;
+    return knapsack(nums, sum / 2);
+  }
+
+  private boolean knapsack(int[] nums, int subsetSum) {
+    final int n = nums.length;
+   
+    boolean[][] dp = new boolean[n + 1][subsetSum + 1];
+    dp[0][0] = true;
+
+    for (int i = 1; i <= n; ++i) {
+      final int num = nums[i - 1];
+      for (int j = 0; j <= subsetSum; ++j)
+        if (j < num)
+          dp[i][j] = dp[i - 1][j];
+        else
+          dp[i][j] = dp[i - 1][j] || dp[i - 1][j - num];
     }
-    
-    private boolean isSumSubarray(int[] nums, int sum, int last) {
-        if (sum == 0) {
-            return true;
-        }
-        if (sum < 0 || last < 0) {
-            return false;
-        }
-        return (isSumSubarray(nums, sum, last - 1) || 
-            isSumSubarray(nums, sum - nums[last], last - 1));
+
+    return dp[n][subsetSum];
     }
 }
