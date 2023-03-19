@@ -59,8 +59,8 @@ class WordDictionary {
 
     public void addWord(String word) {
         TrieNode cur = root;
-        for (char c : word.toCharArray()) {
-            if (cur.children[c - 'a'] == null) {
+        for(char c : word.toCharArray()) {
+            if(cur.children[c - 'a'] == null) {
                 cur.children[c - 'a'] = new TrieNode();
             }
             cur = cur.children[c - 'a'];
@@ -73,18 +73,23 @@ class WordDictionary {
     }
     
     private boolean dfsSearch(TrieNode cur, String word, int i) {
-        if (cur == null) return false;
-        if (i == word.length()) return cur.isWord;
+        if(cur == null) 
+         return false;
+        if(i == word.length()) 
+        return cur.isWord;
         char c = word.charAt(i);
-        if (c == '.') {
-            for (int j = 0; j < 26; j++) {
-                if (dfsSearch(cur.children[j], word, i + 1)) {
+        if(c == '.'){
+            for(int j = 0; j < 26; j++){
+                if(dfsSearch(cur.children[j],word, i+1)){
                     return true;
                 }
             }
             return false;
-        } else {
+        } 
+     else{
             return dfsSearch(cur.children[c - 'a'], word, i + 1);
         }
     }
 }
+
+//Aditya Sharma
